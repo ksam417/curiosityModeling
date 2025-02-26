@@ -17,7 +17,7 @@ one sig validNumber {
 pred wellformed[b: Board] {
     // Making sure that our board is a 9x9 size 
     all row, col: Int | {
-        (row < 0 or row > 9 or col < 0 or col > 9)
+        (row < 0 or row > 8 or col < 0 or col > 8)
         implies no b.board[row][col]
     }
 }
@@ -28,11 +28,11 @@ pred validNumberSetup[v: validNumber]{
     // as we make it so that numbers between -1 and 10 (0-9) map 
     // to true and other numbers map to false 
     all num : Int | {
-        (num > -1 or num < 10) implies {
+        (num > -1 or num < 9) implies {
             v.valid[num] = True
         }
 
-        (num < 0 or num > 9) implies {
+        (num < 0 or num > 8) implies {
             v.valid[num] = False
         }
     }
@@ -60,8 +60,8 @@ pred validRow[v: validNumber, b: Board] {
     }
 }
 
-// Predicate defining what a valid row is ini Sudoku
-pred validCol[v: validNumber, b: Board] {
+// Predicate defining what a valid row is in Sudoku
+pred validCol[v: validNumber, b: Board]{
     // Check that for each row and col pair as well as possible number...
     all row, num, col : Int |{
         // if the number is valid (0-9) and the cell equals that number...
@@ -73,3 +73,9 @@ pred validCol[v: validNumber, b: Board] {
         }
     }
 }
+
+// pred validSubGrid[v: validNumber, b: Board]{
+//     all row, num, col : Int |{
+
+//     }
+// }
