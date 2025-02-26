@@ -17,8 +17,7 @@ one sig validNumber {
 pred wellformed[b: Board] {
     // Making sure that our board is a 9x9 size 
     all row, col: Int | {
-        (row < 0 or row > 8 or col < 0 or col > 8)
-        implies no b.board[row][col]
+        (row < 0 or row > 8 or col < 0 or col > 8) implies no b.board[row][col]
     }
 }
 
@@ -28,11 +27,11 @@ pred validNumberSetup[v: validNumber]{
     // as we make it so that numbers between -1 and 10 (0-9) map 
     // to true and other numbers map to false 
     all num : Int | {
-        (num > -1 or num < 9) implies {
+        (num > 0 and num < 10) implies {
             v.valid[num] = True
         }
 
-        (num < 0 or num > 8) implies {
+        (num < 1 or num > 9) implies {
             v.valid[num] = False
         }
     }
@@ -49,12 +48,12 @@ pred starting[b: Board] {
 // Predicate defining what a valid row is ini Sudoku
 pred validRow[v: validNumber, b: Board] {
     // Check that for each row and col pair as well as possible number...
-    all row, num, col : Int |{
+    all row, col, val : Int |{
         // if the number is valid (0-9) and the cell equals that number..
-        (v.valid[num] = True and b.board[row][col] = num) implies{
+        (v.valid[val] = True and b.board[row][col] = val) implies{
             // every other row that isn't our original row, does not have the same number in that same column/cell
             all otherRow : Int | otherRow != row {
-                b.board[otherRow][col] != num
+                b.board[otherRow][col] != val
             }
         }
     }
@@ -74,8 +73,66 @@ pred validCol[v: validNumber, b: Board]{
     }
 }
 
-// pred validSubGrid[v: validNumber, b: Board]{
-//     all row, num, col : Int |{
+pred validSubGrid[v: validNumber, b: Board]{
+    all row, num, col : Int |{
+        (v.valid[num] = True and b.board[row][col] = num) implies {
+            let rowMod = remainder[row, 3]
+            let colMod = remainder[col, 3]
 
-//     }
-// }
+            // row top position and col top position
+            (rowMod = 0 and colMod = 0) implies {
+
+            }
+
+            // row top position and col mid position
+            (rowMod = 0 and colMod = 1) implies {
+
+            }
+
+            // row top position and col bottom position
+            (rowMod = 0 and colMod = 2) implies {
+
+            }
+
+            // row mid position and col top position
+            (rowMod = 1 and colMod = 0) implies {
+
+            }
+
+            // row mid position and col mid position
+            (rowMod = 1 and colMod = 1) implies {
+
+            }
+            
+            // row mid position and col bottom position
+            (rowMod = 1 and colMod = 2) implies {
+
+            }
+
+            // row bottom position and col top position
+            (rowMod = 2 and colMod = 0) implies {
+
+            }
+
+            // row bottom position and col mid position
+            (rowMod = 2 and colMod = 1) implies {
+
+            }
+
+            // row bottom position and col bottom position
+            (rowMod = 2 and colMod = 2) implies {
+
+            }
+
+        }
+    }
+}
+
+pred fullBoard[v: validNumber, b: Board]{
+    all row, col: Int |{
+        some num : Int |{
+            v.valid[num] = True 
+            b.board[row][col] = num
+        }
+    }
+}
