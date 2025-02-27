@@ -1,5 +1,6 @@
 #lang forge/froglet 
 
+
 abstract sig Boolean {}
 one sig True, False extends Boolean {}
 
@@ -136,3 +137,10 @@ pred fullBoard[v: validNumber, b: Board]{
         }
     }
 }
+
+run {
+    some b: Board | {
+        wellformed[b]
+        //starting[b]
+    }
+} for exactly 1 Board
