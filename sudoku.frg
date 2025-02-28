@@ -12,116 +12,74 @@ sig Board {
     board: pfunc Int -> Int -> Number
 }
 
-// one sig validNumber {
-//     valid : pfunc Int -> Boolean
-// }
 
 // Predicate defining wellformedness of a Sudoku board 
-pred wellformed[v: validNumber, b: Board] {
+pred wellformed[b: Board] {
     // Making sure that our board is a 9x9 size 
     all row, col: Int | {
-        (row < 0 or row > 8 or col < 0 or col > 8) implies {
+        (row < -3 or row > 5 or col < -3 or col > 5) implies {
             no b.board[row][col]
-        } 
-         else {
-            // b.board[row][col] = num
-    
-            // b.board[row][col] = one ONE 
-            // some num : Int | {
-            //     v.valid[num] = True 
-            //     b.board[row][col] = num
-            // }
-
-            some num : Int | {
-                // v.valid[num] = True 
-                b.board[row][col] = ONE
-            }
-         }
-    }
-}
-
-// Setting up the valid number sig
-pred validNumberSetup[v: validNumber]{
-    // Makes sure that we have a mapping from number to boolean 
-    // as we make it so that numbers between -1 and 10 (0-9) map 
-    // to true and other numbers map to false 
-    all num : Int | {
-        (num > 0 and num < 10) implies {
-            v.valid[num] = True
-        }else{
-            v.valid[num] = False  
         }
     }
 }
 
-// pred start[b: Board]{
-//     all row, col : Int |{
-//         (b.board[row][col]) implies {
-            // one num : Number | {
-            //     b.board[row][col] = num
-            // }
-//         }
-//     }
-// }
-
-// // Predicate defining the starting state of a Sudoku board 
-// pred starting[v: validNumber, b: Board] {
-//     // Saying that the board is empty upon start 
-//     all row, col: Int | {
-//         (row > -1 and row < 10 and col > -1 and col < 10) implies {
-//             b.board[row][col] = 1
-//             some num : Int | {
-//                 v.valid[num] = True 
-//                 b.board[row][col] = num
-//             }
-//         }
-//     }
-// }
-
-// Predicate defining what a valid row is ina Sudoku
-pred validRow[v: validNumber, b: Board] {
-    // Check that for each row and col pair as well as possible number...
-    // all row, col, val : Int |{
-    //     // if the number is valid (0-9) and the cell equals that number..
-    //     ((row >= 0 and row <= 8 and col >= 0 and col <= 8) and v.valid[val] = True and b.board[row][col] = val) implies{
-    //         // every other row that isn't our original row, does not have the same number in that same column/cell
-    //         all otherRow : Int | {
-    //             (otherRow >= 0 and otherRow <= 8) implies {
-    //                 otherRow != row 
-    //                 b.board[otherRow][col] != val
-    //             }
-    //         }
-    //     }
-    // }
-
+// Predicate defining what a valid row is in Sudoku
+pred validRow[b: Board] {
+    // For all row and col integer pairings...
     all row, col : Int |{
-        (row >= 0 and row <= 8 and col >= 0 and col <= 8)
-        some val : Number | {
-            v.valid[val] = True
-            b.board[row][col] = val
-            no otherRow : Int | {
-                (otherRow >= 0 and otherRow <= 8)  
-                otherRow != row 
-                b.board[otherRow][col] != val
-                
+        // if the row and col pair is valid (in the board) then...
+        (row >= -3 and row <= 5 and col >= -3 and col <= 5) implies {
+            // there is some value in the board such that...
+            some val : Number | {
+                // the board is equal to that value
+                b.board[row][col] = val
+                // and there is not other row that is...
+                no otherRow : Int | {
+                    (otherRow >= -3 and otherRow <= 5)  
+                    otherRow != row 
+                    // valid, not equal to our current val, and has the same value as our current val
+                    b.board[otherRow][col] = val    
+                }
             }
         }
     }
 }
 
-// // Predicate defining what a valid row is in Sudoku
-// pred validCol[v: validNumber, b: Board]{
-//     // Check that for each row and col pair as well as possible number...
-//     all row, num, col : Int |{
-//         // if the number is valid (0-9) and the cell equals that number...
-//         (v.valid[num] = True and b.board[row][col] = num) implies{
-//             // every other col that isn't our original row, does not have the same number in that same row/cell 
-//             all otherCol: Int | otherRow != row {
-//                 b.board[row][otherCol] != num
-//             }
-//         }
-//     }
-// }
+// Predicate defining what a valid col is in Sudoku
+pred validCol[b: Board] {
+    // For all row and col integer pairings...
+    all row, col : Int |{
+        // if the row and col pair is valid (in the board) then...
+        (row >= -3 and row <= 5 and col >= -3 and col <= 5) implies {
+            // there is some value in the board such that...
+            some val : Number | {
+                // the board is equal to that value
+                b.board[row][col] = val
+                // and there is not other col that is...
+                no otherCol : Int | {
+                    // valid, not equal to our current col, and has the same value as our current col
+                    (otherCol >= -3 and otherCol <= 5)  
+                    otherCol != col 
+                    b.board[row][otherCol] = val    
+                }
+            }
+        }
+    }
+}
+
+// This predicate defines what it means for the Sudoku to be fill
+pred fullBoard[b : Board]{
+    // For all row and col integer pairings...
+    all row, col: Int | {
+        // if the row and col pair is valid (in the board) then...
+        (row >= -3 and row <= 5 and col >= -3 and col <= 5) implies {
+            // there is some value that is in that cell of the board
+            some val : Number | {
+                b.board[row][col] = val
+            }
+        }
+    }
+}
 
 // pred validSubGrid[v: validNumber, b: Board]{
 //     all row, num, col : Int |{
@@ -183,19 +141,11 @@ pred validRow[v: validNumber, b: Board] {
 //     }
 // }
 
-pred fullBoard[v: validNumber, b: Board]{
-    all row, col: Int |{
-        some num : Int |{
-            v.valid[num] = True 
-            b.board[row][col] = num
-        }
-    }
-}
-
 run{
-    some b : Board, v : validNumber | {
-        validNumberSetup[v]
-        wellformed[v, b]
-        validRow[v, b]
+    some b : Board | {
+        wellformed[b]
+        fullBoard[b]
+        validRow[b]
+        validCol[b]
     }
-} for exactly 1 Board, 1 validNumber, 5 Int
+} for exactly 1 Board
