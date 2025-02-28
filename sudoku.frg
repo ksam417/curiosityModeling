@@ -9,12 +9,12 @@ one sig ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE extends Number {}
 // This is the definition of the sudoku board sig
 sig Board {
     // Partial function from (Int,Int) to Int to get the integer on the board at some row and col 
-    board: pfunc Int -> Int -> Int
+    board: pfunc Int -> Int -> Number
 }
 
-one sig validNumber {
-    valid : pfunc Int -> Boolean
-}
+// one sig validNumber {
+//     valid : pfunc Int -> Boolean
+// }
 
 // Predicate defining wellformedness of a Sudoku board 
 pred wellformed[v: validNumber, b: Board] {
@@ -22,10 +22,19 @@ pred wellformed[v: validNumber, b: Board] {
     all row, col: Int | {
         (row < 0 or row > 8 or col < 0 or col > 8) implies {
             no b.board[row][col]
-         } else {
+        } 
+         else {
+            // b.board[row][col] = num
+    
+            // b.board[row][col] = one ONE 
+            // some num : Int | {
+            //     v.valid[num] = True 
+            //     b.board[row][col] = num
+            // }
+
             some num : Int | {
-                v.valid[num] = True 
-                b.board[row][col] = num
+                // v.valid[num] = True 
+                b.board[row][col] = ONE
             }
          }
     }
@@ -39,13 +48,21 @@ pred validNumberSetup[v: validNumber]{
     all num : Int | {
         (num > 0 and num < 10) implies {
             v.valid[num] = True
-        }
-
-        (num < 1 or num > 9) implies {
-            v.valid[num] = False
+        }else{
+            v.valid[num] = False  
         }
     }
 }
+
+// pred start[b: Board]{
+//     all row, col : Int |{
+//         (b.board[row][col]) implies {
+            // one num : Number | {
+            //     b.board[row][col] = num
+            // }
+//         }
+//     }
+// }
 
 // // Predicate defining the starting state of a Sudoku board 
 // pred starting[v: validNumber, b: Board] {
@@ -64,13 +81,29 @@ pred validNumberSetup[v: validNumber]{
 // Predicate defining what a valid row is ina Sudoku
 pred validRow[v: validNumber, b: Board] {
     // Check that for each row and col pair as well as possible number...
-    all row, col, val : Int |{
-        // if the number is valid (0-9) and the cell equals that number..
-        (v.valid[val] = True and b.board[row][col] = val) implies{
-            // every other row that isn't our original row, does not have the same number in that same column/cell
-            all otherRow : Int | {
+    // all row, col, val : Int |{
+    //     // if the number is valid (0-9) and the cell equals that number..
+    //     ((row >= 0 and row <= 8 and col >= 0 and col <= 8) and v.valid[val] = True and b.board[row][col] = val) implies{
+    //         // every other row that isn't our original row, does not have the same number in that same column/cell
+    //         all otherRow : Int | {
+    //             (otherRow >= 0 and otherRow <= 8) implies {
+    //                 otherRow != row 
+    //                 b.board[otherRow][col] != val
+    //             }
+    //         }
+    //     }
+    // }
+
+    all row, col : Int |{
+        (row >= 0 and row <= 8 and col >= 0 and col <= 8)
+        some val : Number | {
+            v.valid[val] = True
+            b.board[row][col] = val
+            no otherRow : Int | {
+                (otherRow >= 0 and otherRow <= 8)  
                 otherRow != row 
                 b.board[otherRow][col] != val
+                
             }
         }
     }
@@ -164,6 +197,5 @@ run{
         validNumberSetup[v]
         wellformed[v, b]
         validRow[v, b]
-        // starting[v,b]
     }
-} for exactly 1 Board, 5 Int
+} for exactly 1 Board, 1 validNumber, 5 Int
