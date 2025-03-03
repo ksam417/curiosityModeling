@@ -80,6 +80,7 @@ pred fullBoard[b : Board]{
     }
 }
 
+
 pred validSubGrids[b: Board]{
     all row, col : Int | {
         (row >= 0 and row <= 8 and col >= 0 and col <= 8) implies {
