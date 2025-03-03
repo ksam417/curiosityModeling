@@ -82,6 +82,7 @@ pred fullBoard[b : Board]{
     }
 }
 
+
 // pred validSubGrid[v: validNumber, b: Board]{
 //     all row, num, col : Int |{
 //         (v.valid[num] = True and b.board[row][col] = num) implies {
