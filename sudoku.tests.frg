@@ -228,7 +228,17 @@ nonvacuous_validRow: assert validRow is sat
 
 }
 
+
+pred firstColTwo {
+  some b: Board |
+      b.board[-3][0] = `ONE and
+      b.board[-2][0] = `TWO and
+      b.board[-1][0] = `THREE
+}
+
 test suite for validCol {
+
+  // Test that the validCol predicate works as expected, where col 0 is completely full of unique values. 
 
     example validCol is {
         some testBoard: Board | validCol[testBoard]
@@ -260,6 +270,7 @@ test suite for validCol {
       + (  5, 0) -> `NINE
     }
 
+    //This test case should pass because of the unique values being present throughout the column
     example validCol1 is {
         some testBoard: Board | validCol[testBoard]
     } for{
@@ -290,6 +301,7 @@ test suite for validCol {
         + (5,  -3) -> `NINE
     }
 
+    //This test should pass because the column is valid, with unique values in each row
     example validCol2 is {
         some testBoard: Board | validCol[testBoard]
     } for{
@@ -319,6 +331,8 @@ test suite for validCol {
     + ( 4, 5) -> `EIGHT
     + ( 5, 5) -> `NINE
     }
+
+    //This test case should fail because the column has a duplicate value
 
     example validColFail is {
         some testBoard: Board | not validCol[testBoard]
@@ -350,6 +364,8 @@ test suite for validCol {
     + ( 5, 0) -> `ONE  
     }
 
+    //This test case should fail because the column is not valid
+
     example validColFail1 is {
         some testBoard: Board | not validCol[testBoard]
     } for {
@@ -379,105 +395,12 @@ test suite for validCol {
     + (4, -3)  -> `EIGHT
     + (5, -3)  -> `ONE
     }
-}
 
-test suite for validSubGrid{
+     // Assert that firstColTwo is consistent with validCol.
+  nonvacuous_firstCol: assert firstColTwo is consistent with validCol for 1 Board
 
-    example subGridPass is {
-        some testBoard: Board | validSubGrid[testBoard]
-    } for {
-        Board = `testBoard
-        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
-
-        `testBoard.board =
-        (-3, -3) -> `ONE
-        + (-3, -2) -> `TWO
-        + (-3, -1) -> `THREE
-        + (-2, -3) -> `FOUR
-        + (-2, -2) -> `FIVE
-        + (-2, -1) -> `SIX
-        + (-1, -3) -> `SEVEN
-        + (-1, -2) -> `EIGHT
-        + (-1, -1) -> `NINE
-
-    }
-
-    example subGridPass1 is {
-        some testBoard: Board, validNumber: Number | validSubGrid[testBoard, validNumber]
-    } for {
-        Board = `testBoard
-        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
-
-        `testBoard.board =
-        (3, 3) -> `ONE
-        + (3, 4) -> `TWO
-        + (3, 5) -> `THREE
-        + (4, 3) -> `NINE 
-        + (4, 4) -> `FOUR
-        + (4, 5) -> `FIVE
-        + (5, 3) -> `SIX
-        + (5, 4) -> `SEVEN
-        + (5, 5) -> `EIGHT
-
-    }
-
-    example subGridFail is {
-        some testBoard: Board, validNumbe: Number | not validSubGrid[testBoard, validNumber]
-    } for {
-
-        Board = `testBoard
-        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
-
-        `testBoard.board =
-    
-        (-3, -3) -> `ONE
-        + (-3, -2) -> `TWO
-        + (-3, -1) -> `THREE
-        + (-2, -3) -> `ONE
-        + (-2, -2) -> `FOUR
-        + (-2, -1) -> `FIVE
-        + (-1, -3) -> `SIX
-        + (-1, -2) -> `SEVEN
-        + (-1, -1) -> `EIGHT
-    }
-
-    example subGridFail1 is {
-        some testBoard: Board, validNumbe: Number | not validSubGrid[testBoard, validNumber]
-    } for {
-
-        Board = `testBoard
-        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
-
-            `testBoard.board =
-        (0, 0) -> `ONE
-        + (0, 1) -> `TWO
-        + (0, 2) -> `THREE
-        + (1, 0) -> `FOUR
-        + (1, 1) -> `ONE    -- Duplicate `ONE
-        + (1, 2) -> `FIVE
-        + (2, 0) -> `SIX
-        + (2, 1) -> `SEVEN
-        + (2, 2) -> `EIGHT
-    }
-}
-
-test suite for empty{
-    example emptyPass is {
-        some testBoard: Board | empty[testBoard]
-    } for {
-        Board = `testBoard
-        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
-    }
-
-    example emptyFail is {
-        some testBoard: Board | not empty[testBoard]
-    } for {
-        Board = `testBoard
-        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
-
-        `testBoard.board =
-        (0, 0) -> `ONE
-    }
+  // Assert that validCol is satisfiable.
+  nonvacuous_validCol: assert validCol is sat
 }
 
 test suite for fullBoard{
@@ -502,7 +425,7 @@ test suite for fullBoard{
     (8,0)->`ONE + (8,1)->`ONE + (8,2)->`ONE + (8,3)->`ONE + (8,4)->`ONE + (8,5)->`ONE + (8,6)->`ONE + (8,7)->`ONE + (8,8)->`ONE  
     }
 
-    //Should be an example of a full, and valid Sudoku board
+    //Is an example of a full, and valid Sudoku board
     example fullBoardPass1 is {
         some testBoard: Board | fullBoard[testBoard]
     } for {
@@ -540,6 +463,8 @@ test suite for fullBoard{
 
     }
 
+    //Is  an example of an invalid full Sudoku board, the board is not a 9 x 9 grid
+
     example fullBoardFail is {
         some testBoard: Board | not fullBoard[testBoard]
     } for {
@@ -557,13 +482,15 @@ test suite for fullBoard{
         + (2, 1) -> `EIGHT
     }
 
-    example fullBoardFail_missingRow is {
+  
+  // This example highlights that missing row 4 should result in a failed test case
+  example fullBoardFail_missingRow is {
   some testBoard: Board | not fullBoard[testBoard]
 } for {
   Board = `testBoard
   Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
 
-  // Assign every cell in all rows except row 4
+  // Assign a value for every cell in all rows except row 4
   `testBoard.board =
     // Row 0
     (0,0)->`ONE + (0,1)->`ONE + (0,2)->`ONE + (0,3)->`ONE + (0,4)->`ONE + (0,5)->`ONE + (0,6)->`ONE + (0,7)->`ONE + (0,8)->`ONE +
@@ -584,13 +511,14 @@ test suite for fullBoard{
     (8,0)->`ONE + (8,1)->`ONE + (8,2)->`ONE + (8,3)->`ONE + (8,4)->`ONE + (8,5)->`ONE + (8,6)->`ONE + (8,7)->`ONE + (8,8)->`ONE
 }
 
+// This test case should fail because it is missing column 7
 example fullBoardFail_missingColumn is {
   some testBoard: Board | not fullBoard[testBoard]
 } for {
   Board = `testBoard
   Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
 
-  // Assign every cell for all rows (0..8) except column 7 is omitted in each row.
+  // Assign a value for every cell for all rows (0..8) except column 7 is left out
   `testBoard.board =
     // Row 0
     (0,0)->`ONE + (0,1)->`ONE + (0,2)->`ONE + (0,3)->`ONE + (0,4)->`ONE + (0,5)->`ONE + (0,6)->`ONE + (0,8)->`ONE +
@@ -612,4 +540,84 @@ example fullBoardFail_missingColumn is {
     (8,0)->`ONE + (8,1)->`ONE + (8,2)->`ONE + (8,3)->`ONE + (8,4)->`ONE + (8,5)->`ONE + (8,6)->`ONE + (8,8)->`ONE
 }
 
+}
+
+test suite for validSubGrids{
+
+    example subGridPass is {
+        some testBoard: Board | validSubGrids[testBoard]
+    } for {
+        Board = `testBoard
+        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
+
+        `testBoard.board =
+        (-3, -3) -> `ONE
+        + (-3, -2) -> `TWO
+        + (-3, -1) -> `THREE
+        + (-2, -3) -> `FOUR
+        + (-2, -2) -> `FIVE
+        + (-2, -1) -> `SIX
+        + (-1, -3) -> `SEVEN
+        + (-1, -2) -> `EIGHT
+        + (-1, -1) -> `NINE
+
+    }
+
+    example subGridPass1 is {
+        some testBoard: Board | validSubGrids[testBoard]
+    } for {
+        Board = `testBoard
+        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
+
+        `testBoard.board =
+        (3, 3) -> `ONE
+        + (3, 4) -> `TWO
+        + (3, 5) -> `THREE
+        + (4, 3) -> `NINE 
+        + (4, 4) -> `FOUR
+        + (4, 5) -> `FIVE
+        + (5, 3) -> `SIX
+        + (5, 4) -> `SEVEN
+        + (5, 5) -> `EIGHT
+
+    }
+
+    example subGridFail is {
+        some testBoard: Board | not validSubGrids[testBoard]
+    } for {
+
+        Board = `testBoard
+        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
+
+        `testBoard.board =
+    
+        (-3, -3) -> `ONE
+        + (-3, -2) -> `TWO
+        + (-3, -1) -> `THREE
+        + (-2, -3) -> `ONE
+        + (-2, -2) -> `FOUR
+        + (-2, -1) -> `FIVE
+        + (-1, -3) -> `SIX
+        + (-1, -2) -> `SEVEN
+        + (-1, -1) -> `EIGHT
+    }
+
+    example subGridFail1 is {
+        some testBoard: Board | not validSubGrids[testBoard]
+    } for {
+
+        Board = `testBoard
+        Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
+
+            `testBoard.board =
+        (0, 0) -> `ONE
+        + (0, 1) -> `TWO
+        + (0, 2) -> `THREE
+        + (1, 0) -> `FOUR
+        + (1, 1) -> `ONE    -- Duplicate `ONE
+        + (1, 2) -> `FIVE
+        + (2, 0) -> `SIX
+        + (2, 1) -> `SEVEN
+        + (2, 2) -> `EIGHT
+    }
 }
