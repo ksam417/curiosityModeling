@@ -17,10 +17,11 @@ pred firstColumnOne {
 }
 
 test suite for wellformed{
+  
 
     // Test that the wellformed predicate works as expected
 
-    example wellFormedPass is {wellformed[`testBoard]} for{
+    example wellFormedPass is { some testBoard: Board | wellformed[testBoard]} for{
 
         // For row, col >= 9, we have no cells assigned.  
   // Rows and columns 0..8 can have any values or be empty; 
@@ -42,8 +43,7 @@ test suite for wellformed{
         `testBoard.board = (0,0) -> `ONE + (0,1) -> `TWO + (0,2) -> `THREE + (1,0) -> `FOUR + (1,1) -> `FIVE + (1,2) -> `SIX
     }
 
-    example wellformedFail is { not wellformed[`invalidBoard]
-    } for {
+    example wellformedFail is { some invalidBoard: Board | not wellformed[invalidBoard]} for {
 
         Board = `invalidBoard
         Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
@@ -59,11 +59,10 @@ test suite for wellformed{
         NINE = `NINE
 
         // Incorrectly place a cell at row 9
-        `invalidBoard.board = (6, 0) -> 1
+        `invalidBoard.board = (6, 0) -> `ONE
     }
 
-    example wellformedFail2 is { not wellformed[`invalidBoard]
-    } for {
+    example wellformedFail2 is { some invalidBoard: Board | not wellformed[invalidBoard]} for {
         Board = `invalidBoard
         Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
 
@@ -227,6 +226,7 @@ nonvacuous_firstRow: assert firstRowTwo is consistent with validRow for 1 Board
 nonvacuous_validRow: assert validRow is sat
 
 }
+
 
 pred firstColTwo {
   some b: Board |
@@ -413,15 +413,24 @@ test suite for fullBoard{
 
         // Assign every cell in rows 0..8 and columns 0..8 the value `ONE.
   `testBoard.board =
-    (0,0)->`ONE + (0,1)->`ONE + (0,2)->`ONE + (0,3)->`ONE + (0,4)->`ONE + (0,5)->`ONE + (0,6)->`ONE + (0,7)->`ONE + (0,8)->`ONE +
-    (1,0)->`ONE + (1,1)->`ONE + (1,2)->`ONE + (1,3)->`ONE + (1,4)->`ONE + (1,5)->`ONE + (1,6)->`ONE + (1,7)->`ONE + (1,8)->`ONE +
-    (2,0)->`ONE + (2,1)->`ONE + (2,2)->`ONE + (2,3)->`ONE + (2,4)->`ONE + (2,5)->`ONE + (2,6)->`ONE + (2,7)->`ONE + (2,8)->`ONE +
-    (3,0)->`ONE + (3,1)->`ONE + (3,2)->`ONE + (3,3)->`ONE + (3,4)->`ONE + (3,5)->`ONE + (3,6)->`ONE + (3,7)->`ONE + (3,8)->`ONE +
-    (4,0)->`ONE + (4,1)->`ONE + (4,2)->`ONE + (4,3)->`ONE + (4,4)->`ONE + (4,5)->`ONE + (4,6)->`ONE + (4,7)->`ONE + (4,8)->`ONE +
-    (5,0)->`ONE + (5,1)->`ONE + (5,2)->`ONE + (5,3)->`ONE + (5,4)->`ONE + (5,5)->`ONE + (5,6)->`ONE + (5,7)->`ONE + (5,8)->`ONE +
-    (6,0)->`ONE + (6,1)->`ONE + (6,2)->`ONE + (6,3)->`ONE + (6,4)->`ONE + (6,5)->`ONE + (6,6)->`ONE + (6,7)->`ONE + (6,8)->`ONE +
-    (7,0)->`ONE + (7,1)->`ONE + (7,2)->`ONE + (7,3)->`ONE + (7,4)->`ONE + (7,5)->`ONE + (7,6)->`ONE + (7,7)->`ONE + (7,8)->`ONE +
-    (8,0)->`ONE + (8,1)->`ONE + (8,2)->`ONE + (8,3)->`ONE + (8,4)->`ONE + (8,5)->`ONE + (8,6)->`ONE + (8,7)->`ONE + (8,8)->`ONE  
+    // Row -3
+    (-3,-3)->`ONE + (-3,-2)->`ONE + (-3,-1)->`ONE + (-3, 0)->`ONE + (-3, 1)->`ONE + (-3, 2)->`ONE + (-3, 3)->`ONE + (-3, 4)->`ONE + (-3, 5)->`ONE +
+    // Row -2 
+    (-2,-3)->`ONE + (-2,-2)->`ONE + (-2,-1)->`ONE + (-2, 0)->`ONE + (-2, 1)->`ONE + (-2, 2)->`ONE + (-2, 3)->`ONE + (-2, 4)->`ONE + (-2, 5)->`ONE +
+    // Row -1
+    (-1,-3)->`ONE + (-1,-2)->`ONE + (-1,-1)->`ONE + (-1, 0)->`ONE + (-1, 1)->`ONE + (-1, 2)->`ONE + (-1, 3)->`ONE + (-1, 4)->`ONE + (-1, 5)->`ONE +
+    // Row 0 
+    (0,-3)->`ONE  + (0,-2)->`ONE  + (0,-1)->`ONE  + (0, 0)->`ONE  + (0, 1)->`ONE  + (0, 2)->`ONE  + (0, 3)->`ONE  + (0, 4)->`ONE  + (0, 5)->`ONE +
+    // Row 1
+    (1,-3)->`ONE  + (1,-2)->`ONE  + (1,-1)->`ONE  + (1, 0)->`ONE  + (1, 1)->`ONE  + (1, 2)->`ONE  + (1, 3)->`ONE  + (1, 4)->`ONE  + (1, 5)->`ONE +
+    // Row 2 
+    (2,-3)->`ONE  + (2,-2)->`ONE  + (2,-1)->`ONE  + (2, 0)->`ONE  + (2, 1)->`ONE  + (2, 2)->`ONE  + (2, 3)->`ONE  + (2, 4)->`ONE  + (2, 5)->`ONE +
+    // Row 3 
+    (3,-3)->`ONE  + (3,-2)->`ONE  + (3,-1)->`ONE  + (3, 0)->`ONE  + (3, 1)->`ONE  + (3, 2)->`ONE  + (3, 3)->`ONE  + (3, 4)->`ONE  + (3, 5)->`ONE +
+    // Row 4 
+    (4,-3)->`ONE  + (4,-2)->`ONE  + (4,-1)->`ONE  + (4, 0)->`ONE  + (4, 1)->`ONE  + (4, 2)->`ONE  + (4, 3)->`ONE  + (4, 4)->`ONE  + (4, 5)->`ONE +
+    // Row 5 
+    (5,-3)->`ONE  + (5,-2)->`ONE  + (5,-1)->`ONE  + (5, 0)->`ONE  + (5, 1)->`ONE  + (5, 2)->`ONE  + (5, 3)->`ONE  + (5, 4)->`ONE  + (5, 5)->`ONE 
     }
 
     //Is an example of a full, and valid Sudoku board
@@ -432,33 +441,33 @@ test suite for fullBoard{
         Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
 
         `testBoard.board =
-      // Row 0
-      (0,0)->`FIVE  + (0,1)->`THREE + (0,2)->`FOUR  + (0,3)->`SIX   + (0,4)->`SEVEN 
-    + (0,5)->`EIGHT + (0,6)->`NINE  + (0,7)->`ONE   + (0,8)->`TWO +
-      // Row 1
-      (1,0)->`SIX   + (1,1)->`SEVEN + (1,2)->`TWO   + (1,3)->`ONE   + (1,4)->`NINE 
-    + (1,5)->`FIVE  + (1,6)->`THREE + (1,7)->`FOUR  + (1,8)->`EIGHT +
-      // Row 2
-      (2,0)->`ONE   + (2,1)->`NINE  + (2,2)->`EIGHT + (2,3)->`THREE + (2,4)->`FOUR  
-    + (2,5)->`TWO   + (2,6)->`FIVE  + (2,7)->`SIX   + (2,8)->`SEVEN +
-      // Row 3
-      (3,0)->`EIGHT + (3,1)->`FIVE  + (3,2)->`NINE  + (3,3)->`SEVEN + (3,4)->`SIX  
-    + (3,5)->`ONE   + (3,6)->`FOUR  + (3,7)->`TWO   + (3,8)->`THREE +
-      // Row 4
-      (4,0)->`FOUR  + (4,1)->`TWO   + (4,2)->`SIX   + (4,3)->`EIGHT + (4,4)->`FIVE  
-    + (4,5)->`THREE + (4,6)->`SEVEN + (4,7)->`NINE  + (4,8)->`ONE +
-      // Row 5
-      (5,0)->`SEVEN + (5,1)->`ONE   + (5,2)->`THREE + (5,3)->`NINE  + (5,4)->`TWO  
-    + (5,5)->`FOUR  + (5,6)->`EIGHT + (5,7)->`FIVE  + (5,8)->`SIX +
-      // Row 6
-      (6,0)->`NINE  + (6,1)->`SIX   + (6,2)->`ONE   + (6,3)->`FIVE  + (6,4)->`THREE 
-    + (6,5)->`SEVEN + (6,6)->`TWO   + (6,7)->`EIGHT + (6,8)->`FOUR +
-      // Row 7
-      (7,0)->`TWO   + (7,1)->`EIGHT + (7,2)->`SEVEN + (7,3)->`FOUR  + (7,4)->`ONE   
-    + (7,5)->`NINE  + (7,6)->`SIX   + (7,7)->`THREE + (7,8)->`FIVE +
-      // Row 8
-      (8,0)->`THREE + (8,1)->`FOUR  + (8,2)->`FIVE  + (8,3)->`TWO   + (8,4)->`EIGHT 
-    + (8,5)->`SIX   + (8,6)->`ONE   + (8,7)->`SEVEN + (8,8)->`NINE
+    // Row -3
+    (-3,-3)->`FIVE  + (-3,-2)->`THREE + (-3,-1)->`FOUR  + (-3,0)->`SIX   + (-3,1)->`SEVEN 
+  + (-3,2)->`EIGHT + (-3,3)->`NINE  + (-3,4)->`ONE   + (-3,5)->`TWO +
+    // Row -2
+    (-2,-3)->`SIX   + (-2,-2)->`SEVEN + (-2,-1)->`TWO   + (-2,0)->`ONE   + (-2,1)->`NINE 
+  + (-2,2)->`FIVE  + (-2,3)->`THREE + (-2,4)->`FOUR  + (-2,5)->`EIGHT +
+    // Row -1 
+    (-1,-3)->`ONE   + (-1,-2)->`NINE  + (-1,-1)->`EIGHT + (-1,0)->`THREE + (-1,1)->`FOUR  
+  + (-1,2)->`TWO   + (-1,3)->`FIVE  + (-1,4)->`SIX   + (-1,5)->`SEVEN +
+    // Row 0
+    (0,-3)->`EIGHT + (0,-2)->`FIVE  + (0,-1)->`NINE  + (0,0)->`SEVEN + (0,1)->`SIX  
+  + (0,2)->`ONE   + (0,3)->`FOUR  + (0,4)->`TWO   + (0,5)->`THREE +
+    // Row 1
+    (1,-3)->`FOUR  + (1,-2)->`TWO   + (1,-1)->`SIX   + (1,0)->`EIGHT + (1,1)->`FIVE  
+  + (1,2)->`THREE + (1,3)->`SEVEN + (1,4)->`NINE  + (1,5)->`ONE +
+    // Row 2 
+    (2,-3)->`SEVEN + (2,-2)->`ONE   + (2,-1)->`THREE + (2,0)->`NINE  + (2,1)->`TWO  
+  + (2,2)->`FOUR  + (2,3)->`EIGHT + (2,4)->`FIVE  + (2,5)->`SIX +
+    // Row 3
+    (3,-3)->`NINE  + (3,-2)->`SIX   + (3,-1)->`ONE   + (3,0)->`FIVE  + (3,1)->`THREE 
+  + (3,2)->`SEVEN + (3,3)->`TWO   + (3,4)->`EIGHT + (3,5)->`FOUR +
+    // Row 4 
+    (4,-3)->`TWO   + (4,-2)->`EIGHT + (4,-1)->`SEVEN + (4,0)->`FOUR  + (4,1)->`ONE   
+  + (4,2)->`NINE  + (4,3)->`SIX   + (4,4)->`THREE + (4,5)->`FIVE +
+    // Row 5 
+    (5,-3)->`THREE + (5,-2)->`FOUR  + (5,-1)->`FIVE  + (5,0)->`TWO   + (5,1)->`EIGHT 
+  + (5,2)->`SIX   + (5,3)->`ONE   + (5,4)->`SEVEN + (5,5)->`NINE
 
     }
 
@@ -489,25 +498,25 @@ test suite for fullBoard{
   Board = `testBoard
   Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
 
-  // Assign a value for every cell in all rows except row 4
-  `testBoard.board =
-    // Row 0
-    (0,0)->`ONE + (0,1)->`ONE + (0,2)->`ONE + (0,3)->`ONE + (0,4)->`ONE + (0,5)->`ONE + (0,6)->`ONE + (0,7)->`ONE + (0,8)->`ONE +
-    // Row 1
-    (1,0)->`ONE + (1,1)->`ONE + (1,2)->`ONE + (1,3)->`ONE + (1,4)->`ONE + (1,5)->`ONE + (1,6)->`ONE + (1,7)->`ONE + (1,8)->`ONE +
+  // Assign a value for every cell in all rows except the omitted row (new row 1)
+`testBoard.board =
+    // Row -3 
+    (-3,-3)->`ONE + (-3,-2)->`ONE + (-3,-1)->`ONE + (-3, 0)->`ONE + (-3, 1)->`ONE + (-3, 2)->`ONE + (-3, 3)->`ONE + (-3, 4)->`ONE + (-3, 5)->`ONE +
+    // Row -2 
+    (-2,-3)->`ONE + (-2,-2)->`ONE + (-2,-1)->`ONE + (-2, 0)->`ONE + (-2, 1)->`ONE + (-2, 2)->`ONE + (-2, 3)->`ONE + (-2, 4)->`ONE + (-2, 5)->`ONE +
+    // Row -1 
+    (-1,-3)->`ONE + (-1,-2)->`ONE + (-1,-1)->`ONE + (-1, 0)->`ONE + (-1, 1)->`ONE + (-1, 2)->`ONE + (-1, 3)->`ONE + (-1, 4)->`ONE + (-1, 5)->`ONE +
+    // Row 0 
+    (0,-3)->`ONE  + (0,-2)->`ONE  + (0,-1)->`ONE  + (0, 0)->`ONE  + (0, 1)->`ONE  + (0, 2)->`ONE  + (0, 3)->`ONE  + (0, 4)->`ONE  + (0, 5)->`ONE +
+    // Row 1 is omitted 
     // Row 2
-    (2,0)->`ONE + (2,1)->`ONE + (2,2)->`ONE + (2,3)->`ONE + (2,4)->`ONE + (2,5)->`ONE + (2,6)->`ONE + (2,7)->`ONE + (2,8)->`ONE +
+    (2,-3)->`ONE  + (2,-2)->`ONE  + (2,-1)->`ONE  + (2, 0)->`ONE  + (2, 1)->`ONE  + (2, 2)->`ONE  + (2, 3)->`ONE  + (2, 4)->`ONE  + (2, 5)->`ONE +
     // Row 3
-    (3,0)->`ONE + (3,1)->`ONE + (3,2)->`ONE + (3,3)->`ONE + (3,4)->`ONE + (3,5)->`ONE + (3,6)->`ONE + (3,7)->`ONE + (3,8)->`ONE +
-    // Row 4 is intentionally omitted.
+    (3,-3)->`ONE  + (3,-2)->`ONE  + (3,-1)->`ONE  + (3, 0)->`ONE  + (3, 1)->`ONE  + (3, 2)->`ONE  + (3, 3)->`ONE  + (3, 4)->`ONE  + (3, 5)->`ONE +
+    // Row 4
+    (4,-3)->`ONE  + (4,-2)->`ONE  + (4,-1)->`ONE  + (4, 0)->`ONE  + (4, 1)->`ONE  + (4, 2)->`ONE  + (4, 3)->`ONE  + (4, 4)->`ONE  + (4, 5)->`ONE +
     // Row 5
-    (5,0)->`ONE + (5,1)->`ONE + (5,2)->`ONE + (5,3)->`ONE + (5,4)->`ONE + (5,5)->`ONE + (5,6)->`ONE + (5,7)->`ONE + (5,8)->`ONE +
-    // Row 6
-    (6,0)->`ONE + (6,1)->`ONE + (6,2)->`ONE + (6,3)->`ONE + (6,4)->`ONE + (6,5)->`ONE + (6,6)->`ONE + (6,7)->`ONE + (6,8)->`ONE +
-    // Row 7
-    (7,0)->`ONE + (7,1)->`ONE + (7,2)->`ONE + (7,3)->`ONE + (7,4)->`ONE + (7,5)->`ONE + (7,6)->`ONE + (7,7)->`ONE + (7,8)->`ONE +
-    // Row 8
-    (8,0)->`ONE + (8,1)->`ONE + (8,2)->`ONE + (8,3)->`ONE + (8,4)->`ONE + (8,5)->`ONE + (8,6)->`ONE + (8,7)->`ONE + (8,8)->`ONE
+    (5,-3)->`ONE  + (5,-2)->`ONE  + (5,-1)->`ONE  + (5, 0)->`ONE  + (5, 1)->`ONE  + (5, 2)->`ONE  + (5, 3)->`ONE  + (5, 4)->`ONE  + (5, 5)->`ONE
 }
 
 // This test case should fail because it is missing column 7
@@ -519,24 +528,24 @@ example fullBoardFail_missingColumn is {
 
   // Assign a value for every cell for all rows (0..8) except column 7 is left out
   `testBoard.board =
-    // Row 0
-    (0,0)->`ONE + (0,1)->`ONE + (0,2)->`ONE + (0,3)->`ONE + (0,4)->`ONE + (0,5)->`ONE + (0,6)->`ONE + (0,8)->`ONE +
-    // Row 1
-    (1,0)->`ONE + (1,1)->`ONE + (1,2)->`ONE + (1,3)->`ONE + (1,4)->`ONE + (1,5)->`ONE + (1,6)->`ONE + (1,8)->`ONE +
-    // Row 2
-    (2,0)->`ONE + (2,1)->`ONE + (2,2)->`ONE + (2,3)->`ONE + (2,4)->`ONE + (2,5)->`ONE + (2,6)->`ONE + (2,8)->`ONE +
+    // Row -3 
+    (-3,-3)->`ONE + (-3,-2)->`ONE + (-3,-1)->`ONE + (-3, 0)->`ONE + (-3, 1)->`ONE + (-3, 2)->`ONE + (-3, 3)->`ONE + (-3, 5)->`ONE +
+    // Row -2 
+    (-2,-3)->`ONE + (-2,-2)->`ONE + (-2,-1)->`ONE + (-2, 0)->`ONE + (-2, 1)->`ONE + (-2, 2)->`ONE + (-2, 3)->`ONE + (-2, 5)->`ONE +
+    // Row -1 
+    (-1,-3)->`ONE + (-1,-2)->`ONE + (-1,-1)->`ONE + (-1, 0)->`ONE + (-1, 1)->`ONE + (-1, 2)->`ONE + (-1, 3)->`ONE + (-1, 5)->`ONE +
+    // Row 0 
+    (0,-3)->`ONE  + (0,-2)->`ONE  + (0,-1)->`ONE  + (0, 0)->`ONE  + (0, 1)->`ONE  + (0, 2)->`ONE  + (0, 3)->`ONE  + (0, 5)->`ONE +
+    // Row 1 
+    (1,-3)->`ONE  + (1,-2)->`ONE  + (1,-1)->`ONE  + (1, 0)->`ONE  + (1, 1)->`ONE  + (1, 2)->`ONE  + (1, 3)->`ONE  + (1, 5)->`ONE +
+    // Row 2 
+    (2,-3)->`ONE  + (2,-2)->`ONE  + (2,-1)->`ONE  + (2, 0)->`ONE  + (2, 1)->`ONE  + (2, 2)->`ONE  + (2, 3)->`ONE  + (2, 5)->`ONE +
     // Row 3
-    (3,0)->`ONE + (3,1)->`ONE + (3,2)->`ONE + (3,3)->`ONE + (3,4)->`ONE + (3,5)->`ONE + (3,6)->`ONE + (3,8)->`ONE +
+    (3,-3)->`ONE  + (3,-2)->`ONE  + (3,-1)->`ONE  + (3, 0)->`ONE  + (3, 1)->`ONE  + (3, 2)->`ONE  + (3, 3)->`ONE  + (3, 5)->`ONE +
     // Row 4
-    (4,0)->`ONE + (4,1)->`ONE + (4,2)->`ONE + (4,3)->`ONE + (4,4)->`ONE + (4,5)->`ONE + (4,6)->`ONE + (4,8)->`ONE +
+    (4,-3)->`ONE  + (4,-2)->`ONE  + (4,-1)->`ONE  + (4, 0)->`ONE  + (4, 1)->`ONE  + (4, 2)->`ONE  + (4, 3)->`ONE  + (4, 5)->`ONE +
     // Row 5
-    (5,0)->`ONE + (5,1)->`ONE + (5,2)->`ONE + (5,3)->`ONE + (5,4)->`ONE + (5,5)->`ONE + (5,6)->`ONE + (5,8)->`ONE +
-    // Row 6
-    (6,0)->`ONE + (6,1)->`ONE + (6,2)->`ONE + (6,3)->`ONE + (6,4)->`ONE + (6,5)->`ONE + (6,6)->`ONE + (6,8)->`ONE +
-    // Row 7
-    (7,0)->`ONE + (7,1)->`ONE + (7,2)->`ONE + (7,3)->`ONE + (7,4)->`ONE + (7,5)->`ONE + (7,6)->`ONE + (7,8)->`ONE +
-    // Row 8
-    (8,0)->`ONE + (8,1)->`ONE + (8,2)->`ONE + (8,3)->`ONE + (8,4)->`ONE + (8,5)->`ONE + (8,6)->`ONE + (8,8)->`ONE
+    (5,-3)->`ONE  + (5,-2)->`ONE  + (5,-1)->`ONE  + (5, 0)->`ONE  + (5, 1)->`ONE  + (5, 2)->`ONE  + (5, 3)->`ONE  + (5, 5)->`ONE
 }
 
 }
