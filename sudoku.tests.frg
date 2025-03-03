@@ -20,7 +20,8 @@ test suite for wellformed{
 
     // Test that the wellformed predicate works as expected
 
-    example wellFormedPass is {wellformed[`testBoard]} for{
+    example wellFormedPass is {wellformed} for{
+
 
         // For row, col >= 9, we have no cells assigned.  
   // Rows and columns 0..8 can have any values or be empty; 
@@ -541,6 +542,7 @@ example fullBoardFail_missingColumn is {
 
 }
 
+
 test suite for validSubGrids{
 
     example subGridPass is {
@@ -582,6 +584,7 @@ test suite for validSubGrids{
     }
 
     example subGridFail is {
+
         some testBoard: Board | not validSubGrids[testBoard]
     } for {
 

@@ -115,6 +115,7 @@ pred validSubGridsHelper[b: Board, rowRef : Int, colRef :Int]{
 
 }
 
+
 pred validSubGrids[b: Board]{
     all row, col : Int {
         // Top left subgrid
