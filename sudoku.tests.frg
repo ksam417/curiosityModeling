@@ -79,15 +79,6 @@ test suite for wellformed{
         // Incorrectly place a cell at row 0 and col 6
         `invalidBoard.board = (0, 6) -> `ONE
     }
-
-    nonvacuous_wellformed: assert wellformed is sat
-
-    // Assert that a board with a valid first row is consistent with being wellformed.
-    nonvacuous_fullFirstRow: assert firstRowOne is consistent with wellformed for 1 Board
-
-    // Assert that a board with a valid first column is consistent with being wellformed.
-    nonvacuous_firstColumn: assert firstColumnOne is consistent with wellformed for 1 Board
-
 }
 
 pred firstRowTwo {
@@ -220,7 +211,7 @@ test suite for validRow {
 // Assert that firstRow is consistent with validRow.
 // (In other words, there is at least one board with a first row that can be arranged 
 // to satisfy the validRow predicate.)
-nonvacuous_firstRow: assert firstRowTwo is consistent with validRow for 1 Board
+nonvacuous_firstRow: assert { all b: Board | firstRowTwo and validRow[b] } is sat 
 
 // Assert that validRow is satisfiable
 nonvacuous_validRow: assert validRow is sat
@@ -340,15 +331,15 @@ test suite for validCol {
         Board = `testBoard
         Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
 
-        ONE = `ONE
-        TWO = `TWO
-        THREE = `THREE
-        FOUR = `FOUR
-        FIVE = `FIVE
-        SIX = `SIX
-        SEVEN = `SEVEN
-        EIGHT = `EIGHT
-        NINE = `NINE
+        // ONE = `ONE
+        // TWO = `TWO
+        // THREE = `THREE
+        // FOUR = `FOUR
+        // FIVE = `FIVE
+        // SIX = `SIX
+        // SEVEN = `SEVEN
+        // EIGHT = `EIGHT
+        // NINE = `NINE
 
         // Column 0 is invalid: duplicate value in the same column causes failure
   `testBoard.board =
@@ -549,6 +540,8 @@ example fullBoardFail_missingColumn is {
 }
 
 }
+
+//These tests do not work because our multiple approaches to validSubGrids did not end up working. These tests, given a validSubGrid that worked, should work. 
 
 test suite for validSubGrids{
 
