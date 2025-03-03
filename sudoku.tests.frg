@@ -22,6 +22,7 @@ test suite for wellformed{
 
     example wellFormedPass is {wellformed} for{
 
+
         // For row, col >= 9, we have no cells assigned.  
   // Rows and columns 0..8 can have any values or be empty; 
   // the key is that we don’t try to place anything out of 0..8 range.
@@ -541,10 +542,11 @@ example fullBoardFail_missingColumn is {
 
 }
 
-test suite for validSubGrid{
+
+test suite for validSubGrids{
 
     example subGridPass is {
-        some testBoard: Board | validSubGrid[testBoard]
+        some testBoard: Board | validSubGrids[testBoard]
     } for {
         Board = `testBoard
         Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
@@ -563,7 +565,7 @@ test suite for validSubGrid{
     }
 
     example subGridPass1 is {
-        some testBoard: Board, validNumber: Number | validSubGrid[testBoard, validNumber]
+        some testBoard: Board | validSubGrids[testBoard]
     } for {
         Board = `testBoard
         Number = `ONE + `TWO + `THREE + `FOUR + `FIVE + `SIX + `SEVEN + `EIGHT + `NINE
@@ -582,7 +584,8 @@ test suite for validSubGrid{
     }
 
     example subGridFail is {
-        some testBoard: Board, validNumbe: Number | not validSubGrid[testBoard, validNumber]
+
+        some testBoard: Board | not validSubGrids[testBoard]
     } for {
 
         Board = `testBoard
@@ -602,7 +605,7 @@ test suite for validSubGrid{
     }
 
     example subGridFail1 is {
-        some testBoard: Board, validNumbe: Number | not validSubGrid[testBoard, validNumber]
+        some testBoard: Board | not validSubGrids[testBoard]
     } for {
 
         Board = `testBoard
