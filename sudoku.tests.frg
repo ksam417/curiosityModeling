@@ -17,10 +17,11 @@ pred firstColumnOne {
 }
 
 test suite for wellformed{
+  
 
     // Test that the wellformed predicate works as expected
 
-    example wellFormedPass is {wellformed} for{
+    example wellFormedPass is { some testBoard: Board | wellformed[testBoard]} for{
 
         // For row, col >= 9, we have no cells assigned.  
   // Rows and columns 0..8 can have any values or be empty; 
